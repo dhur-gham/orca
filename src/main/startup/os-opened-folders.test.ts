@@ -68,8 +68,13 @@ describe('OS-opened folders', () => {
     ])
   })
 
-  it('accepts a drive root passed as C:\\. and rejects the quote-mangled C:"', () => {
-    expect(folderPathsFromArguments(['C:\\.', 'd:\\.'], 'win32')).toEqual(['C:\\', 'd:\\'])
+  it('keeps the folder name when the shell appends a trailing \\. to the background path', () => {
+    expect(
+      folderPathsFromArguments(
+        ['C:\\repo\\.', 'C:\\\\.', 'd:\\\\.', '\\\\srv\\share\\dir\\.'],
+        'win32'
+      )
+    ).toEqual(['C:\\repo', 'C:\\', 'd:\\', '\\\\srv\\share\\dir'])
     expect(folderPathsFromArguments(['C:"'], 'win32')).toEqual([])
   })
 
